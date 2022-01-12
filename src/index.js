@@ -20,7 +20,7 @@ function renderCard(array){
 
 refs.form.addEventListener('submit', onFormSubmit);
 let searchingData = '';
-let page;
+let page = 0;
 let totalHits;
 
 function onFormSubmit(e){
