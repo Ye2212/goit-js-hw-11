@@ -1,21 +1,47 @@
 import './sass/main.scss';
+import { refs } from './js/refs';
 import fetchPixabay from './js/fetch-pixabay';
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import axios from 'axios';
 import cardTemplate from './template-card.hbs';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 
-const form = document.querySelector("#search-form");
-const gallery = document.querySelector(".gallery");
-form.addEventListener('submit', onFormSubmit);
+// import SimpleLightbox from 'simplelightbox';
+// import 'simplelightbox/dist/simple-lightbox.min.css';
+
+// import axios from 'axios';
+
+
+
+function renderCard(array){
+ const cardMarkup = array.map(item => cardTemplate(item)).join('');
+ refs.gallery.insertAdjacentHTML('beforeend', cardMarkup);
+}
+
+
+refs.form.addEventListener('submit', onFormSubmit);
+let searchingData = '';
+let page;
+let totalHits;
 
 function onFormSubmit(e){
 e.preventDefault();
 
-const searchingData = e.currentTarget.searchQuery.value;
-fetchPixabay(searchingData).then();
+searchingData = e.currentTarget.searchQuery.value;
+page = 1;
+if(searchingData.trim() === '') {
+    Notify.failure('Please enter your search data.');
+    return;
+}
+
+fetchPixabay(searchingData, page)
+.then(response => {
+    refs.form.reset();
+    // console.log(response);
+    if (response.totalHits === 0) {
+        Notify.failure('Sorry, there are no images matching your search query. Please try again!');
+    }
+});
+
 }
 
 
