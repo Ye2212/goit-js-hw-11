@@ -3,10 +3,8 @@ import { refs } from './js/refs';
 import fetchPixabay from './js/fetch-pixabay';
 import cardTemplate from './template-card.hbs';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-
-
-// import SimpleLightbox from 'simplelightbox';
-// import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 // import axios from 'axios';
 
@@ -35,10 +33,15 @@ if(searchingData.trim() === '') {
 
 fetchPixabay(searchingData, page)
 .then(response => {
-    refs.form.reset();
+    // refs.form.reset();
     // console.log(response);
     if (response.totalHits === 0) {
         Notify.failure('Sorry, there are no images matching your search query. Please try again!');
+    }
+    if (response.totalHits > 0) {
+        Notify.info(`Hooray! We found ${response.totalHits} images`);
+        refs.gallery.innerHTML = '';
+        renderCard(response.hits);
     }
 });
 
