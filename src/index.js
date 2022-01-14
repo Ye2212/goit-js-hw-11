@@ -2,9 +2,10 @@ import './sass/main.scss';
 import { refs } from './js/refs';
 import fetchPixabay from './js/fetch-pixabay';
 import cardTemplate from './template-card.hbs';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { Notify } from 'notiflix/build/notiflix-notify-aio'
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+
 
 // import axios from 'axios';
 
@@ -15,6 +16,12 @@ function renderCard(array){
  refs.gallery.insertAdjacentHTML('beforeend', cardMarkup);
 }
 
+let lightbox = new SimpleLightbox('.gallery a', { 
+    captions: true,
+    captionsData: 'alt',
+    captionPosition: 'bottom',
+    captionDelay: 250,
+});
 
 refs.form.addEventListener('submit', onFormSubmit);
 let searchingData = '';
@@ -33,15 +40,16 @@ if(searchingData.trim() === '') {
 
 fetchPixabay(searchingData, page)
 .then(response => {
-    // refs.form.reset();
     // console.log(response);
     if (response.totalHits === 0) {
+        gallery.innerHTML = '';
         Notify.failure('Sorry, there are no images matching your search query. Please try again!');
     }
     if (response.totalHits > 0) {
         Notify.info(`Hooray! We found ${response.totalHits} images`);
         refs.gallery.innerHTML = '';
         renderCard(response.hits);
+        lightbox.refresh();
     }
 });
 
