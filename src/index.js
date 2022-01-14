@@ -14,14 +14,18 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 function renderCard(array){
  const cardMarkup = array.map(item => cardTemplate(item)).join('');
  refs.gallery.insertAdjacentHTML('beforeend', cardMarkup);
+lightbox();
+}
+function lightbox(){
+    let lightbox = new SimpleLightbox('.gallery a', { 
+        captions: true,
+        captionsData: 'alt',
+        captionPosition: 'bottom',
+        captionDelay: 250,
+    });
+    lightbox.refresh();
 }
 
-let lightbox = new SimpleLightbox('.gallery a', { 
-    captions: true,
-    captionsData: 'alt',
-    captionPosition: 'bottom',
-    captionDelay: 250,
-});
 
 refs.form.addEventListener('submit', onFormSubmit);
 let searchingData = '';
@@ -42,14 +46,15 @@ fetchPixabay(searchingData, page)
 .then(response => {
     // console.log(response);
     if (response.totalHits === 0) {
-        gallery.innerHTML = '';
+        refs.gallery.innerHTML = '';
         Notify.failure('Sorry, there are no images matching your search query. Please try again!');
     }
     if (response.totalHits > 0) {
         Notify.info(`Hooray! We found ${response.totalHits} images`);
         refs.gallery.innerHTML = '';
         renderCard(response.hits);
-        lightbox.refresh();
+        // lightbox();
+        // lightbox.refresh();
     }
 });
 
