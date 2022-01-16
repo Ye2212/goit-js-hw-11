@@ -23,14 +23,17 @@ function lightbox(){
         captionDelay: 250,
     });
     lightbox.refresh();
+// scroll();
+}
+
+function scroll(){
     const { height: cardHeight } = document.querySelector('.gallery')
-.firstElementChild.getBoundingClientRect();
-
-window.scrollBy({
-top: cardHeight * 2,
-behavior: 'smooth',
-});
-
+    .firstElementChild.getBoundingClientRect();
+    
+    window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+    });
 }
 
 refs.form.addEventListener('submit', onFormSubmit);
@@ -62,6 +65,7 @@ per_page = response.hits.length;
         refs.gallery.innerHTML = '';
         renderCard(response.hits);
         refs.loadMoreBtn.classList.remove('is-hidden');
+        refs.endcollectionText.classList.add('is-hidden');
     };
 
 });
@@ -76,6 +80,7 @@ page += 1;
 fetchPixabay(searchingData, page).then(response => {
     renderCard(response.hits);
     per_page += response.hits.length;
+    scroll();
 
     if (per_page >= response.totalHits) {
         Notify.failure("We're sorry, but you've reached the end of search results.");
