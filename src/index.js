@@ -33,7 +33,7 @@ perPage = response.hits.length;
 
     if (response.totalHits === 0) {
         clearGalleryHTML();
-        addISHidden();
+        refs.endcollectionText.classList.add('is-hidden');
         Notify.failure('Sorry, there are no images matching your search query. Please try again!');
     }
     try {
