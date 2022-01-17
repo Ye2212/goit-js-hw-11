@@ -6,9 +6,13 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio'
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import scroll from './js/scroll';
+import arrowToTop from './js/arrow-to-top';
 
+
+arrowToTop();
 // ==================================================================onFormSubmit=======================
 refs.form.addEventListener('submit', onFormSubmit);
+// refs.goTopBtn.
 let searchingData = '';
 let page = 1;
 let perPage = 0;
@@ -54,6 +58,7 @@ refs.loadMoreBtn.addEventListener('click', loadMore);
 
 async function loadMore(){
 try{
+    // arrowToTop();
     refs.loadMoreBtn.disabled = true;
 pageIncrement();
 const response = await fetchPixabay(searchingData, page);
