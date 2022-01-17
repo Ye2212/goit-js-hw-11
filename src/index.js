@@ -51,9 +51,13 @@ perPage = response.hits.length;
 refs.loadMoreBtn.addEventListener('click', loadMore);
 
 
+
 async function loadMore(){
+try{
+    refs.loadMoreBtn.disabled = true;
 pageIncrement();
 const response = await fetchPixabay(searchingData, page);
+
 
     renderCard(response.hits);
     perPage += response.hits.length;
@@ -62,7 +66,13 @@ const response = await fetchPixabay(searchingData, page);
     if (perPage >= response.totalHits) {
         Notify.failure("We're sorry, but you've reached the end of search results.");
         addISHidden();
-    };
+    }
+    refs.loadMoreBtn.disabled = false;
+} catch(error){
+    console.log(error)
+
+}
+
 }
 
 // =============================================================================API=====================
